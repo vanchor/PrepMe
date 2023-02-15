@@ -17,5 +17,8 @@ namespace PrepMe.Domain
         public string Description { get; set; } = "";
         [Column(TypeName = "nvarchar(20)")]
         public string ImageUrl { get; set; } = "";
+
+        public ICollection<Product> Products { get; set; }
+        public List<ProductRecipe> ProductRecipes { get; set; }
     }
 }

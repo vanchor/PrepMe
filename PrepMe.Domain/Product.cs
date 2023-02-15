@@ -12,5 +12,8 @@ namespace PrepMe.Domain
         [Key]
         public int ProductId { get; set; }
         public string ProductName { get; set; } = "";
+
+        public ICollection<Recipe> Recipes { get; set; }
+        public List<ProductRecipe> ProductRecipes { get; set; }
     }
 }
