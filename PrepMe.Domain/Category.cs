@@ -14,6 +14,5 @@ namespace PrepMe.Domain
         public string CategoryName { get; set; } = "";
 
         public ICollection<Product> Products { get; set; }
-        public List<ProductCategory> ProductCategories { get; set; }
     }
 }

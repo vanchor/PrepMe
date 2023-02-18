@@ -9,6 +9,6 @@ namespace PrepMe.DAL.Interfaces
 {
     public interface IProductRepository : IBaseRepository<Product>
     {
-        public bool HasProduct(string product);
+        bool IsProductExist(string product);
     }
 }

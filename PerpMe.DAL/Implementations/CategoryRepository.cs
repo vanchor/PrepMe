@@ -15,10 +15,9 @@ namespace PrepMe.DAL.Implementations
         {
         }
 
-        public bool HasCategory(string category)
+        public bool IsCategoryExist(string category)
         {
-            bool check = _context.Categories.Any(p => p.Equals(category));
-            return check;
+            return _context.Categories.Any(p => p.Equals(category));
         }
     }
 }

@@ -15,10 +15,9 @@ namespace PrepMe.DAL.Implementations
 
         }
 
-        public bool HasProduct(string product)
+        public bool IsProductExist(string product)
         {
-            bool check = _context.Products.Any(p => p.Equals(product));
-            return check;
+            return _context.Products.Any(p => p.Equals(product));
         }
     }
 }

@@ -9,8 +9,8 @@ namespace PrepMe.Services.ViewModels
 {
     public class BaseResponse<T>
     {
-        public string Description { get; set; }
+        public string? Description { get; set; }
         public HttpStatusCode StatusCode { get; set; }
-        public T Data { get; set; }
+        public T? Data { get; set; }
     }
 }

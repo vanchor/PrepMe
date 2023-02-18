@@ -8,57 +8,59 @@ using System.Text;
 using System.Threading.Tasks;
 using PrepMe.DAL.Interfaces;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using PrepMe.Domain;
+using PrepMe.DAL;
 
 namespace PrepMe.Services.Implementations
 {
     public class ProductService : IProductService
     {
+        private readonly PrepMeDbContext _prepMeDbContext;
         private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private Category categoryID;
 
-        public ProductService(IProductRepository productRepository, ICategoryRepository categoryRepository)
+        public ProductService(IProductRepository productRepository, ICategoryRepository categoryRepository, PrepMeDbContext prepMeDbContext)
         {
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
+            _prepMeDbContext = prepMeDbContext;
         }
 
-        public async Task<BaseResponse<ProductVM>> AddToDb(IEnumerable<ProductVM> productVM)
+        public async Task<BaseResponse<ProductVM>> AddToDbAsync(IEnumerable<ProductVM> productVM)
         {
             try
             {
-                List<ProductVM> result = new List<ProductVM>();
+                List<Product> result = new List<Product>();
                 foreach (var item in productVM)
                 {
-
                     item.productName = item.productName.Trim();
                     item.categoryName = item.categoryName.Trim();
-                    if (string.IsNullOrEmpty(item.productName) && string.IsNullOrEmpty(item.categoryName))
+                    if (!string.IsNullOrEmpty(item.productName) || !string.IsNullOrEmpty(item.categoryName))
                     {
-                        continue;
-                    }
-                    else
-                    {
-                        bool hasProduct = _productRepository.HasProduct(item.productName);
-                        bool hasCategory = _categoryRepository.HasCategory(item.categoryName);
-                        if (hasCategory && hasProduct)
+                        bool hasProduct = _productRepository.IsProductExist(item.productName);
+                        bool hasCategory = _categoryRepository.IsCategoryExist(item.categoryName);
+                        if (hasCategory)
                         {
-                            continue;
+                            var categoryID = _prepMeDbContext.Categories.Where(s => s.CategoryName == item.categoryName);
                         }
                         else
                         {
-                            result.Add(new ProductVM
+                            _categoryRepository.Add();
+                        }
+                        if (!hasProduct)
+                        {
+                            result.Add(new Product
                             {
-                                productName = item.productName,
-                                categoryName = item.categoryName,
+                                ProductName = item.productName,
+                                Category = categoryID.CategoryId,
                             });
-
                         }
                     }
                 }
                 //need to change
                 _categoryRepository.AddRange(result);
                 await _productRepository.SaveChangesAsync();
-                await _categoryRepository.SaveChangesAsync();
             }
             catch (Exception ex)
             {

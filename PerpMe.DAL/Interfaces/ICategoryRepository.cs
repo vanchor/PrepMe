@@ -9,7 +9,7 @@ namespace PrepMe.DAL.Interfaces
 {
     public interface ICategoryRepository : IBaseRepository<Category>
     {
-        public bool HasCategory(string category);
+        bool IsCategoryExist(string category);
     }
        
     

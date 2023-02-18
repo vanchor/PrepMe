@@ -9,6 +9,6 @@ namespace PrepMe.Services.Intefaces
 {
     public interface IProductService
     {
-        Task<BaseResponse<ProductVM>> AddToDb(IEnumerable<ProductVM> productVM);
+        Task<BaseResponse<ProductVM>> AddToDbAsync(IEnumerable<ProductVM> productVM);
     }
 }
