@@ -5,7 +5,7 @@ namespace PrepMe.Services.Intefaces
 {
     public interface IProductService
     {
-        public Task<BaseResponse<List<Product>>> AddToDbAsync(IEnumerable<string> productVM);
-        public BaseResponse<IEnumerable<Product>> FindByName(string name, int number = 10);
+        public Task<BaseResponse<List<Product>>> AddToDbAsync(IEnumerable<string> products);
+        public BaseResponse<List<Product>> FindByName(string name, int number = 10);
     }
 }

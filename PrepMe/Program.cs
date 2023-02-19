@@ -13,7 +13,6 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 builder.Services.AddDbContext<PrepMeDbContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("sqlServerConnection")));
 

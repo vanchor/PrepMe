@@ -23,12 +23,12 @@ namespace PrepMe.Services.Implementations
             _productRepository = productRepository;
         }
 
-        public async Task<BaseResponse<List<Product>>> AddToDbAsync(IEnumerable<string> productVM)
+        public async Task<BaseResponse<List<Product>>> AddToDbAsync(IEnumerable<string> products)
         {
             try
             {
                 List<Product> result = new List<Product>();
-                foreach (var item in productVM)
+                foreach (var item in products)
                 {
                     string newItem = item.Trim();
                     if (!string.IsNullOrEmpty(newItem)
