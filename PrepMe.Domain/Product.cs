@@ -15,5 +15,15 @@ namespace PrepMe.Domain
 
         public ICollection<Recipe> Recipes { get; set; }
         public List<ProductRecipe> ProductRecipes { get; set; }
+
+        public Product()
+        {
+
+        }
+
+        public Product(string name)
+        {
+            ProductName = name;
+        }
     }
 }

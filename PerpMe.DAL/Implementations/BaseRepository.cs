@@ -1,4 +1,5 @@
-﻿using PrepMe.DAL.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using PrepMe.DAL.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,6 @@ namespace PrepMe.DAL.Implementations
     public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
         protected readonly PrepMeDbContext _context;
-        // CONTEXT
         public BaseRepository(PrepMeDbContext context)
         {
             _context = context;
@@ -18,8 +18,7 @@ namespace PrepMe.DAL.Implementations
 
         public void Add(T item)
         {
-            // return _context.Set<T>().Tolist();
-            throw new NotImplementedException();
+            _context.Set<T>().Add(item);
         }
 
         public void AddRange(IEnumerable<T> items)
@@ -27,44 +26,45 @@ namespace PrepMe.DAL.Implementations
             _context.Set<T>().AddRange(items);
         }
 
-        public IEnumerable<T> Get()
+        public IEnumerable<T> GetAll()
         {
-            throw new NotImplementedException();
+            return _context.Set<T>().ToList();
         }
 
-        public Task<IEnumerable<T>> GetAsync()
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Set<T>().ToListAsync();
         }
 
-        public T GetById(int id)
+        public T? GetById(int id)
         {
-            throw new NotImplementedException();
+            return _context.Set<T>().Find(id);
         }
 
         public void Remove(T item)
         {
-            throw new NotImplementedException();
+            _context.Set<T>().Remove(item);
         }
 
-        public void RemoveRange(IEnumerable<T> entities)
+        public void RemoveRange(IEnumerable<T> items)
         {
-            throw new NotImplementedException();
+            _context.Set<T>().RemoveRange(items);
         }
 
         public void SaveChanges()
         {
-            throw new NotImplementedException();
+            _context.SaveChanges();
         }
 
-        public Task SaveChangesAsync()
+        public async Task SaveChangesAsync()
         {
-            throw new NotImplementedException();
+            await _context.SaveChangesAsync();
         }
 
         public T Update(T item)
         {
-            throw new NotImplementedException();
+            _context.Set<T>().Update(item);
+            return item;
         }
     }
 }
