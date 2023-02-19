@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 
 namespace PrepMe.DAL.Implementations
 {
-    internal class BaseRepository<T> : IBaseRepository<T> where T : class
+    public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
+        protected readonly PrepMeDbContext _context;
         // CONTEXT
-        public BaseRepository(/* Context */)
+        public BaseRepository(PrepMeDbContext context)
         {
-                
+            _context = context;
         }
 
         public void Add(T item)
@@ -23,7 +24,7 @@ namespace PrepMe.DAL.Implementations
 
         public void AddRange(IEnumerable<T> items)
         {
-            throw new NotImplementedException();
+            _context.Set<T>().AddRange(items);
         }
 
         public IEnumerable<T> Get()

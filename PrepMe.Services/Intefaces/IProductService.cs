@@ -1,0 +1,14 @@
+﻿using PrepMe.Services.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace PrepMe.Services.Intefaces
+{
+    public interface IProductService
+    {
+        Task<BaseResponse<ProductVM>> AddToDbAsync(IEnumerable<ProductVM> productVM);
+    }
+}
