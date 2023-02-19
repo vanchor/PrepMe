@@ -23,23 +23,20 @@ namespace PrepMe.Services.Implementations
             _productRepository = productRepository;
         }
 
-        public async Task<BaseResponse<List<Product>>> AddToDbAsync(IEnumerable<ProductVM> productVM)
+        public async Task<BaseResponse<List<Product>>> AddToDbAsync(IEnumerable<string> products)
         {
             try
             {
                 List<Product> result = new List<Product>();
-                foreach (var item in productVM)
+                foreach (var item in products)
                 {
-                    item.productName = item.productName.Trim();
-                    if (!string.IsNullOrEmpty(item.productName)
-                        && !result.Any(x => x.ProductName.Equals(item.productName, StringComparison.CurrentCultureIgnoreCase)) 
-                        && !_productRepository.IsProductExist(item.productName)
+                    string newItem = item.Trim();
+                    if (!string.IsNullOrEmpty(newItem)
+                        && !result.Any(x => x.ProductName.Equals(newItem, StringComparison.CurrentCultureIgnoreCase)) 
+                        && !_productRepository.IsProductExist(newItem)
                         )
                     {
-                        result.Add(new Product
-                        {
-                            ProductName = item.productName
-                        });
+                        result.Add(new Product(newItem));
                     }
                 }
                 _productRepository.AddRange(result);
