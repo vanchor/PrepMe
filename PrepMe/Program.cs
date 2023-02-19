@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PrepMe.DAL;
+using PrepMe.Services.Implementations;
+using PrepMe.Services.Intefaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<PrepMeDbContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("sqlServerConnection")));
+
+builder.Services.AddScoped<IApiParser, SpoonacularApi>();
 
 var app = builder.Build();
 
