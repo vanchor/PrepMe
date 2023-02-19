@@ -20,6 +20,7 @@ namespace PrepMe.Domain
         {
 
         }
+        
         public Product(string name)
         {
             ProductName = name;

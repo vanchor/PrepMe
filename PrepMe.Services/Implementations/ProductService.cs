@@ -53,14 +53,22 @@ namespace PrepMe.Services.Implementations
             }
         }
 
-        public BaseResponse<List<Product>> FindByName(string name, int number = 10)
+        public BaseResponse<IEnumerable<Product>> FindByName(string name, int number = 10)
         {
-            return new BaseResponse<List<Product>>(
-                description: "",
-                data: new List<Product>
-                {
-                    {new Product{ProductName = name} }
-                });
+            try
+            {
+                var products = _productRepository.Search(name, number);
+
+                return new BaseResponse<IEnumerable<Product>>(
+                    description: "Success",
+                    data: products);
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<IEnumerable<Product>>(
+                    description: $"[ProductService:FindByName] : {ex.Message}",
+                    statusCode: System.Net.HttpStatusCode.BadRequest);
+            }
         }
     }
 }

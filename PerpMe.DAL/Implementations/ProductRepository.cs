@@ -17,7 +17,12 @@ namespace PrepMe.DAL.Implementations
 
         public bool IsProductExist(string product)
         {
-            return _context.Products.Any(p => p.Equals(product));
+            return _context.Products.Any(p => p.ProductName.Equals(product));
+        }
+
+        public IEnumerable<Product> Search(string query, int count)
+        {
+            return _context.Products.Where(p => p.ProductName.Contains(query)).Take(count).OrderBy(x => x.ProductName).ToList();
         }
     }
 }

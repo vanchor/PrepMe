@@ -10,5 +10,6 @@ namespace PrepMe.DAL.Interfaces
     public interface IProductRepository : IBaseRepository<Product>
     {
         bool IsProductExist(string product);
+        IEnumerable<Product> Search(string query, int count);
     }
 }

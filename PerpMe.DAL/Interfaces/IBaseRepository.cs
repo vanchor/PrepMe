@@ -9,8 +9,8 @@ namespace PrepMe.DAL.Interfaces
     public interface IBaseRepository<T>
         where T : class
     {
-        IEnumerable<T> Get();
-        T GetById(int id);
+        IEnumerable<T> GetAll();
+        T? GetById(int id);
         void Add(T item);
         void AddRange(IEnumerable<T> items);
 
@@ -20,6 +20,6 @@ namespace PrepMe.DAL.Interfaces
 
         void SaveChanges();
         Task SaveChangesAsync();
-        Task<IEnumerable<T>> GetAsync();
+        Task<IEnumerable<T>> GetAllAsync();
     }
 }
