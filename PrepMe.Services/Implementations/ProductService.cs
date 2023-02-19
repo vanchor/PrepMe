@@ -23,7 +23,7 @@ namespace PrepMe.Services.Implementations
             _productRepository = productRepository;
         }
 
-        public async Task<BaseResponse<ProductVM>> AddToDbAsync(IEnumerable<ProductVM> productVM)
+        public async Task<BaseResponse<List<Product>>> AddToDbAsync(IEnumerable<ProductVM> productVM)
         {
             try
             {
@@ -31,34 +31,39 @@ namespace PrepMe.Services.Implementations
                 foreach (var item in productVM)
                 {
                     item.productName = item.productName.Trim();
-                    if (!string.IsNullOrEmpty(item.productName))
+                    if (!string.IsNullOrEmpty(item.productName)
+                        && !result.Any(x => x.ProductName.Equals(item.productName, StringComparison.CurrentCultureIgnoreCase)) 
+                        && !_productRepository.IsProductExist(item.productName)
+                        )
                     {
-                        bool hasProduct = _productRepository.IsProductExist(item.productName);
-                        if (!hasProduct)
+                        result.Add(new Product
                         {
-                            result.Add(new Product
-                            {
-                                ProductName = item.productName,
-                            });
-                        }
+                            ProductName = item.productName
+                        });
                     }
                 }
                 _productRepository.AddRange(result);
                 await _productRepository.SaveChangesAsync();
+                return new BaseResponse<List<Product>>(
+                    description: "Success",
+                    data: result);
             }
             catch (Exception ex)
             {
-                return new BaseResponse<ProductVM>()
-                {
-                    Description = $"[AdToDb] : {ex.Message}",
-                    StatusCode = System.Net.HttpStatusCode.InternalServerError
-                };
+                return new BaseResponse<List<Product>>(
+                    description: $"[AdToDb] : {ex.Message}",
+                    statusCode: System.Net.HttpStatusCode.InternalServerError);
             }
+        }
 
-            return new BaseResponse<ProductVM>()
-            {
-                StatusCode = System.Net.HttpStatusCode.OK,
-            };
+        public BaseResponse<List<Product>> FindByName(string name, int number = 10)
+        {
+            return new BaseResponse<List<Product>>(
+                description: "",
+                data: new List<Product>
+                {
+                    {new Product{ProductName = name} }
+                });
         }
     }
 }
