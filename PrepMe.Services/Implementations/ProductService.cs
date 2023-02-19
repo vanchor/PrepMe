@@ -10,21 +10,17 @@ using PrepMe.DAL.Interfaces;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using PrepMe.Domain;
 using PrepMe.DAL;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace PrepMe.Services.Implementations
 {
     public class ProductService : IProductService
     {
-        private readonly PrepMeDbContext _prepMeDbContext;
         private readonly IProductRepository _productRepository;
-        private readonly ICategoryRepository _categoryRepository;
-        private Category categoryID;
 
-        public ProductService(IProductRepository productRepository, ICategoryRepository categoryRepository, PrepMeDbContext prepMeDbContext)
+        public ProductService(IProductRepository productRepository)
         {
             _productRepository = productRepository;
-            _categoryRepository = categoryRepository;
-            _prepMeDbContext = prepMeDbContext;
         }
 
         public async Task<BaseResponse<ProductVM>> AddToDbAsync(IEnumerable<ProductVM> productVM)
@@ -35,31 +31,19 @@ namespace PrepMe.Services.Implementations
                 foreach (var item in productVM)
                 {
                     item.productName = item.productName.Trim();
-                    item.categoryName = item.categoryName.Trim();
-                    if (!string.IsNullOrEmpty(item.productName) || !string.IsNullOrEmpty(item.categoryName))
+                    if (!string.IsNullOrEmpty(item.productName))
                     {
                         bool hasProduct = _productRepository.IsProductExist(item.productName);
-                        bool hasCategory = _categoryRepository.IsCategoryExist(item.categoryName);
-                        if (hasCategory)
-                        {
-                            var categoryID = _prepMeDbContext.Categories.Where(s => s.CategoryName == item.categoryName);
-                        }
-                        else
-                        {
-                            _categoryRepository.Add();
-                        }
                         if (!hasProduct)
                         {
                             result.Add(new Product
                             {
                                 ProductName = item.productName,
-                                Category = categoryID.CategoryId,
                             });
                         }
                     }
                 }
-                //need to change
-                _categoryRepository.AddRange(result);
+                _productRepository.AddRange(result);
                 await _productRepository.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -70,8 +54,11 @@ namespace PrepMe.Services.Implementations
                     StatusCode = System.Net.HttpStatusCode.InternalServerError
                 };
             }
-            
 
+            return new BaseResponse<ProductVM>()
+            {
+                StatusCode = System.Net.HttpStatusCode.OK,
+            };
         }
     }
 }

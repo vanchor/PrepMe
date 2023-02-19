@@ -9,7 +9,5 @@ namespace PrepMe.Services.ViewModels
     public class ProductVM
     {
         public string productName { get; set; } = "";
-        public string categoryName { get; set; } = "";
-
     }
 }

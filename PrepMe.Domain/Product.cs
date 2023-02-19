@@ -15,7 +15,5 @@ namespace PrepMe.Domain
 
         public ICollection<Recipe> Recipes { get; set; }
         public List<ProductRecipe> ProductRecipes { get; set; }
-
-        public Category Category { get; set; }
     }
 }
