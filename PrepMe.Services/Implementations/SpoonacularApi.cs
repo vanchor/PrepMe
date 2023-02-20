@@ -35,7 +35,7 @@ namespace PrepMe.Services.Implementations
         {
             try
             {
-                HttpResponseMessage response = await client.GetAsync($"food/ingredients/search?apiKey={_apiToken}&query={query}");
+                HttpResponseMessage response = await client.GetAsync($"food/ingredients/search?apiKey={_apiToken}&query={query}&number={count}");
 
                 if (response.IsSuccessStatusCode)
                 {
